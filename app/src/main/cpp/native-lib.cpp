@@ -41,7 +41,7 @@ Java_com_example_myapplication_MainActivity_changName(JNIEnv *env, jobject thiz)
     jfieldID j_fid = env->GetFieldID(j_cls, "name", "Ljava/lang/String;");
     jstring j_str = static_cast<jstring>(env->GetObjectField(thiz, j_fid));
 //     打印字符串
-    char * c_str = const_cast<char *>(env->GetStringUTFChars(j_str, NULL));
+    char *c_str = const_cast<char *>(env->GetStringUTFChars(j_str, NULL));
     LOGD("native:%s", c_str);
     LOGE("native:%s", c_str);
     LOGI("native:%s", c_str);
@@ -51,18 +51,34 @@ Java_com_example_myapplication_MainActivity_changName(JNIEnv *env, jobject thiz)
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_example_myapplication_MainActivity_changage(JNIEnv *env, jclass clazz) {
-    jfieldID  j_fid = env->GetStaticFieldID(clazz,"age","I");
-    jint  age = env->GetStaticIntField(clazz,j_fid);
-    age +=10;
-    env->SetStaticIntField(clazz,j_fid,age);
-
+    jfieldID j_fid = env->GetStaticFieldID(clazz, "age", "I");
+    jint age = env->GetStaticIntField(clazz, j_fid);
+    age += 10;
+    env->SetStaticIntField(clazz, j_fid, age);
 }
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_example_myapplication_MainActivity_callAddMethod(JNIEnv *env, jobject clazz) {
     //自己得到jclass
-   jclass jclazz = env->GetObjectClass(clazz);
-    jmethodID  jmethodId = env->GetMethodID(jclazz,"add", "(II)I");
-   jint  sun = env->CallIntMethod(clazz,jmethodId,2,3);
-   LOGE("Add%d",sun);
+    jclass jclazz = env->GetObjectClass(clazz);
+    jmethodID jmethodId = env->GetMethodID(jclazz, "add", "(II)I");
+    jint sun = env->CallIntMethod(clazz, jmethodId, 2, 3);
+    LOGE("Add%d", sun);
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_myapplication_MainActivity_getTest(JNIEnv *env, jobject thiz) {
+    jclass  jclass1 =env->GetObjectClass(thiz);
+    jfieldID  jfieldId = env->GetFieldID(jclass1,"TEST", "Ljava/lang/String;");
+    jstring str = static_cast<jstring>(env->GetObjectField(thiz, jfieldId));
+    const char* val =  env->GetStringUTFChars(str,NULL);
+    LOGE("TST:%s",val);
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_myapplication_MainActivity_setTest(JNIEnv *env, jobject thiz) {
+    jclass  jclass1 = env->GetObjectClass(thiz);
+    jfieldID  jfieldId = env->GetFieldID(jclass1,"TEST", "Ljava/lang/String;");
+    jstring  js = env->NewStringUTF("金莲说");
+    env->SetObjectField(thiz,jfieldId,js);
 }
